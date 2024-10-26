@@ -37,7 +37,15 @@ exports.postCrearProducto = (req, res) => {
     const categoria = req.body.categoria;
     const color = req.body.color;
 
-    const producto = new Producto({ nombre: nombre, urlImagen: urlImagen, descripcion: descripcion, precio: precio, categoria: categoria, color: color});
+    const producto = new Producto({ 
+        nombre: nombre, 
+        urlImagen: urlImagen, 
+        descripcion: descripcion, 
+        precio: precio, 
+        categoria: categoria, 
+        color: color,
+        idUsuario: req.usuario._id
+    });
 
     producto
         .save()

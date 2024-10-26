@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const express = require('express');
 
 const mongoose = require('mongoose');
+const Usuario = require('./models/usuario');
 
 const adminRoutes = require('./routes/admin')
 const tiendaRoutes = require('./routes/tienda');
@@ -18,6 +19,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 
+app.use((req, res, next) => {
+  Usuario.findById('671d584d1f85fd1efa888a79')
+    .then(usuario => {
+      console.log(usuario)
+      req.usuario = usuario;
+      next();
+    })
+    .catch(err => console.log(err));
+});
+
 app.use(loginRoutes);
 app.use('/admin', adminRoutes);
 app.use(tiendaRoutes);
@@ -25,11 +36,25 @@ app.use(tiendaRoutes);
 app.use(errorController.get404)
 
 mongoose
-.connect(
+  .connect(
     'mongodb+srv://marisol:secreto@cluster0.71urh.mongodb.net/mascotas?retryWrites=true&w=majority&appName=Cluster0'
   )
   .then(result => {
-    console.log(result)
+    // console.log(result);
+    Usuario.findOne().then((usuario) => {
+      if (!usuario) {
+        const usuario = new Usuario({
+          nombre: 'Marisol Pachauri',
+          email: 'marisol@mail.com',
+          password: '123456',
+          role: 'admin',
+          carrito: {
+            items: []
+          }
+        });
+        usuario.save();
+      }
+    })
     app.listen(3000);
   })
   .catch(err => {
