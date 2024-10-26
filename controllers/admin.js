@@ -104,7 +104,7 @@ exports.postEliminarProducto = (req, res, next) => {
 
     const idProducto = req.body.idProducto;
 
-    Producto.findbyIdAndDelete(idProducto)
+    Producto.findByIdAndDelete(idProducto)
         .then((result) => {
             console.log('Producto eliminado');
             res.redirect('/admin/productos');
