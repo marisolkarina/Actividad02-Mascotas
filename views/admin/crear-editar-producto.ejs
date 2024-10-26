@@ -22,7 +22,7 @@
             <!-- Campo Precio -->
             <div class="mb-3">
                 <label for="precio" class="form-label">Precio</label>
-                <input type="number" class="form-control" name="precio" id="precio" step="0.01" value="<% if (modoEdicion) { %><%= producto.precio %><% } %>">
+                <input type="number" class="form-control" name="precio" id="precio" step="0.01" value="<% if (modoEdicion) { %><%= producto.precio.toFixed(2) %><% } %>">
             </div>
     
             <!-- Campo Categoria -->

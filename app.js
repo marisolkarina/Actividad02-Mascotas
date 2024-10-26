@@ -2,6 +2,8 @@ const path = require('path');
 const bodyParser = require('body-parser')
 const express = require('express');
 
+const mongoose = require('mongoose');
+
 const adminRoutes = require('./routes/admin')
 const tiendaRoutes = require('./routes/tienda');
 const errorController = require('./controllers/error');
@@ -22,4 +24,14 @@ app.use(tiendaRoutes);
 
 app.use(errorController.get404)
 
-app.listen(3000);
+mongoose
+.connect(
+    'mongodb+srv://marisol:secreto@cluster0.71urh.mongodb.net/mascotas?retryWrites=true&w=majority&appName=Cluster0'
+  )
+  .then(result => {
+    console.log(result)
+    app.listen(3000);
+  })
+  .catch(err => {
+    console.log(err);
+  });
