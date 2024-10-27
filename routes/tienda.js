@@ -31,7 +31,7 @@ router.get('/productos/:idProducto', tiendaController.getProducto);
 router.get('/carrito', tiendaController.getCarrito);
 router.post('/agregar-carrito', tiendaController.postCarrito);
 
-// router.post('/eliminar-producto', tiendaController.postEliminarProductoCarrito)
+router.post('/eliminar-producto', tiendaController.postEliminarProductoCarrito)
 
 // router.post('/actualizar-cantidad', tiendaController.postActualizarCantidadCarrito);
 

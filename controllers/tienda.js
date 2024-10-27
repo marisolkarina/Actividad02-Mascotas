@@ -200,7 +200,6 @@ exports.getCarrito = (req, res, next) => {
 exports.postCarrito = (req, res) => {
     const idProducto = req.body.idProducto;
     const cantidad = parseInt(req.body.cantidad, 10);
-    // const nombreProducto = req.body.nombreProducto;
 
     Producto.findById(idProducto)
         .then((producto) => {
@@ -224,25 +223,25 @@ exports.postEliminarProductoCarrito = (req, res) => {
     const idProducto = req.body.idProducto;
     const precio = Producto.findById(idProducto).precio;
 
-    req.usuario
-        .deleteItemDelCarrito(idProducto, precio)
-        .then((result) => {
-            // console.log(result);
-            res.redirect('/carrito');
-        }).catch((err) => {
-            console.log(err);
-        });
-        
-    // Producto.findById(idProducto)
-    //     .then((producto) => {
-    //         return req.usuario.deleteItemDelCarrito(idProducto, producto);
-    //     })
+    // req.usuario
+    //     .deleteItemDelCarrito(idProducto, precio)
     //     .then((result) => {
+    //         // console.log(result);
     //         res.redirect('/carrito');
-    //     })
-    //     .catch((err) => {
+    //     }).catch((err) => {
     //         console.log(err);
     //     });
+        
+    Producto.findById(idProducto)
+        .then((producto) => {
+            return req.usuario.deleteItemDelCarrito(idProducto, producto);
+        })
+        .then((result) => {
+            res.redirect('/carrito');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 
     // Producto.findById(idProducto, producto => {
 

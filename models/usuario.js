@@ -41,7 +41,7 @@ usuarioSchema.methods.agregarAlCarrito = function(producto, cantidadInput) {
     const indiceEnCarrito = this.carrito.items.findIndex(cp => {
         return cp.idProducto.toString() === producto._id.toString();
     });
-    let nuevaCantidad = 1;
+    let nuevaCantidad = cantidadInput;
     const itemsActualizados = [...this.carrito.items];
   
     if (indiceEnCarrito >= 0) {
@@ -64,12 +64,12 @@ usuarioSchema.methods.agregarAlCarrito = function(producto, cantidadInput) {
     return this.save();
   };
   
-  usuarioSchema.methods.deleteItemDelCarrito = function(idProducto, precio) {
+  usuarioSchema.methods.deleteItemDelCarrito = function(idProducto, producto) {
     
-    const productoEliminar = this.carrito.items.find(cp => cp.id === id);
+    const productoEliminar = this.carrito.items.find(cp => cp.idProducto.toString() === producto._id.toString());
     const cantidadProducto = productoEliminar.cantidad;
 
-    this.carrito.precioTotal = this.carrito.precioTotal - precio*cantidadProducto;
+    this.carrito.precioTotal = this.carrito.precioTotal - producto.precio*cantidadProducto;
 
     const itemsActualizados = this.carrito.items.filter(item => {
         return item.idProducto.toString() !== idProducto.toString();
