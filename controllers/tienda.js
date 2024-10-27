@@ -1,4 +1,6 @@
 const Producto = require('../models/producto');
+const Pedido = require('../models/pedido');
+const { populate } = require('../models/usuario');
 
 exports.getProductos = (req, res) => {
 
@@ -223,3 +225,50 @@ exports.postActualizarCantidadCarrito = (req, res) => {
     
 };
 
+
+exports.getMisPedidos = (req, res, next) => {
+    Pedido.find({'usuario.idUsuario': req.usuario._id})
+        .then((pedidos) => {
+            res.render('user/pedidos', {
+                path: '/pedidos',
+                titulo: 'Mis pedidos',
+                pedidos: pedidos
+            })
+        }).catch((err) => {
+            console.log(err);
+        });
+}
+
+
+exports.postMisPedidos = (req, res, next) => {
+    req.usuario
+        .populate('carrito.items.idProducto')
+        .then((usuario) => {
+            // construir un array productosDelPedido 
+            // con objetos de 2 propiedades: cantidad y producto
+            const productosDelPedido = usuario.carrito.items.map(item => {
+                // traer los detalles del producto ._doc
+                return {cantidad: item.cantidad, producto: {...item.idProducto._doc}};
+            });
+            const pedido = new Pedido({
+                productos: productosDelPedido,
+                usuario: {
+                    nombre: req.usuario.nombre,
+                    idUsuario: req.usuario
+                },
+                estado: 'pendiente',
+                fechaPedido: new Date(),        
+                fechaEntrega: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 dias despues del pedido
+            })
+            return pedido.save();
+        })
+        .then(result => {
+            return req.usuario.limpiarCarrito();
+        })
+        .then(() => {
+            res.redirect('/pedidos');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}

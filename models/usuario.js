@@ -99,6 +99,11 @@ usuarioSchema.methods.actualizarCantidadProducto = function (idProducto, nuevaCa
      
 }
 
+usuarioSchema.methods.limpiarCarrito = function() {
+    this.carrito = { items: [], precioTotal: 0 };
+    return this.save();
+};
+
 module.exports = mongoose.model('Usuario', usuarioSchema);
 
 

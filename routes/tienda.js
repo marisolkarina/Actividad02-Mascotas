@@ -35,4 +35,8 @@ router.post('/eliminar-producto', tiendaController.postEliminarProductoCarrito)
 
 router.post('/actualizar-cantidad', tiendaController.postActualizarCantidadCarrito);
 
+// Mis pedidos
+router.get('/pedidos', tiendaController.getMisPedidos);
+router.post('/crear-pedido', tiendaController.postMisPedidos);
+
 module.exports = router;
