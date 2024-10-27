@@ -63,10 +63,11 @@ usuarioSchema.methods.agregarAlCarrito = function(producto, cantidadInput) {
     this.carrito = carritoActualizado;
     return this.save();
   };
+
   
-  usuarioSchema.methods.deleteItemDelCarrito = function(idProducto, producto) {
-    
-    const productoEliminar = this.carrito.items.find(cp => cp.idProducto.toString() === producto._id.toString());
+usuarioSchema.methods.deleteItemDelCarrito = function(idProducto, producto) {
+
+    const productoEliminar = this.carrito.items.find(cp => cp.idProducto.toString() === idProducto.toString());
     const cantidadProducto = productoEliminar.cantidad;
 
     this.carrito.precioTotal = this.carrito.precioTotal - producto.precio*cantidadProducto;
@@ -76,7 +77,27 @@ usuarioSchema.methods.agregarAlCarrito = function(producto, cantidadInput) {
     });
     this.carrito.items = itemsActualizados;
     return this.save();
-  };
+};
+
+usuarioSchema.methods.actualizarCantidadProducto = function (idProducto, nuevaCantidad, producto) {
+    if (!this.carrito) {
+        this.carrito = {items: [], precioTotal: 0};
+    }
+    const productoEditar = this.carrito.items.find(cp => cp.idProducto.toString() === idProducto.toString());
+    if (!productoEditar) {
+        return;
+    }
+    // Actualizar la cantidad
+    const cantidadAnterior = productoEditar.cantidad;
+    productoEditar.cantidad = nuevaCantidad;
+    
+    // Actualizar el precio total
+    const precio = producto.precio;
+    this.carrito.precioTotal = this.carrito.precioTotal - (precio * cantidadAnterior) + (precio * nuevaCantidad);
+    
+    return this.save();
+     
+}
 
 module.exports = mongoose.model('Usuario', usuarioSchema);
 
