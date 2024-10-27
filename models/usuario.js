@@ -25,9 +25,58 @@ const usuarioSchema = new Schema({
                 idProducto: { type: Schema.Types.ObjectId, ref: 'Producto', required: true },
                 cantidad: { type: Number, required: true }
             }
-        ]
+        ],
+        precioTotal: {
+            type: Number, 
+            required: true
+        }
     }
 })
+
+
+usuarioSchema.methods.agregarAlCarrito = function(producto, cantidadInput) {
+    if (!this.carrito) {
+        this.carrito = {items: [], precioTotal: 0};
+    }
+    const indiceEnCarrito = this.carrito.items.findIndex(cp => {
+        return cp.idProducto.toString() === producto._id.toString();
+    });
+    let nuevaCantidad = 1;
+    const itemsActualizados = [...this.carrito.items];
+  
+    if (indiceEnCarrito >= 0) {
+        nuevaCantidad = this.carrito.items[indiceEnCarrito].cantidad + cantidadInput;
+        itemsActualizados[indiceEnCarrito].cantidad = nuevaCantidad;
+    } else {
+        itemsActualizados.push({
+            idProducto: producto._id,
+            cantidad: nuevaCantidad
+        });
+    }
+
+    const total = this.carrito.precioTotal + +producto.precio*Number(cantidadInput);
+    const carritoActualizado = {
+        items: itemsActualizados,
+        precioTotal: total
+    };
+  
+    this.carrito = carritoActualizado;
+    return this.save();
+  };
+  
+  usuarioSchema.methods.deleteItemDelCarrito = function(idProducto, precio) {
+    
+    const productoEliminar = this.carrito.items.find(cp => cp.id === id);
+    const cantidadProducto = productoEliminar.cantidad;
+
+    this.carrito.precioTotal = this.carrito.precioTotal - precio*cantidadProducto;
+
+    const itemsActualizados = this.carrito.items.filter(item => {
+        return item.idProducto.toString() !== idProducto.toString();
+    });
+    this.carrito.items = itemsActualizados;
+    return this.save();
+  };
 
 module.exports = mongoose.model('Usuario', usuarioSchema);
 

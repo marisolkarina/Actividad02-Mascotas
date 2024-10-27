@@ -28,8 +28,8 @@ router.get('/productos/marron', tiendaController.getProductosPorColor('marron'))
 router.get('/productos/:idProducto', tiendaController.getProducto);
 
 //Carrito
-// router.get('/carrito', tiendaController.getCarrito);
-// router.post('/agregar-carrito', tiendaController.postCarrito);
+router.get('/carrito', tiendaController.getCarrito);
+router.post('/agregar-carrito', tiendaController.postCarrito);
 
 // router.post('/eliminar-producto', tiendaController.postEliminarProductoCarrito)
 

@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 
 app.use((req, res, next) => {
-  Usuario.findById('671d584d1f85fd1efa888a79')
+  Usuario.findById('671d8f50279f2a74fa269ee7')
     .then(usuario => {
       console.log(usuario)
       req.usuario = usuario;
@@ -49,7 +49,8 @@ mongoose
           password: '123456',
           role: 'admin',
           carrito: {
-            items: []
+            items: [],
+            precioTotal: 0
           }
         });
         usuario.save();

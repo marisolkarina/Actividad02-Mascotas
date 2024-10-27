@@ -1,6 +1,4 @@
-const productos = [];
 const Producto = require('../models/producto');
-const Carrito = require('../models/carrito');
 
 exports.getProductos = (req, res) => {
 
@@ -155,6 +153,23 @@ exports.postProductoPalabra = (req, res) => {
     
 }
 
+exports.getCarrito = (req, res, next) => {
+    req.usuario
+        .populate('carrito.items.idProducto')
+        .then((usuario) => {
+            const productosEnCarrito = usuario.carrito.items;
+            const total = usuario.carrito.precioTotal;
+            res.render('tienda/carrito', {
+                path: '/carrito',
+                titulo: 'Mi Carrito',
+                items: productosEnCarrito,
+                total: total
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
 
 // exports.getCarrito = (req, res, next) => {
 
@@ -182,27 +197,60 @@ exports.postProductoPalabra = (req, res) => {
 //     });
 // };
 
-// exports.postCarrito = (req, res) => {
-//     const idProducto = req.body.idProducto;
-//     const cantidad = parseInt(req.body.cantidad, 10);
-//     const nombreProducto = req.body.nombreProducto;
+exports.postCarrito = (req, res) => {
+    const idProducto = req.body.idProducto;
+    const cantidad = parseInt(req.body.cantidad, 10);
+    // const nombreProducto = req.body.nombreProducto;
 
-//     Producto.findById(idProducto, producto => {
-//         Carrito.agregarProducto(idProducto, producto.precio, cantidad, nombreProducto);
-//         res.redirect('/carrito');
-//     })
-// }
+    Producto.findById(idProducto)
+        .then((producto) => {
+            return req.usuario.agregarAlCarrito(producto, cantidad);
+        })
+        .then((result) => {
+            // console.log(result);
+            res.redirect('/carrito');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 
-// exports.postEliminarProductoCarrito = (req, res) => {
-//     const idProducto = req.body.idProducto;
+    // Producto.findById(idProducto, producto => {
+    //     Carrito.agregarProducto(idProducto, producto.precio, cantidad, nombreProducto);
+    //     res.redirect('/carrito');
+    // })
+}
 
-//     Producto.findById(idProducto, producto => {
+exports.postEliminarProductoCarrito = (req, res) => {
+    const idProducto = req.body.idProducto;
+    const precio = Producto.findById(idProducto).precio;
 
-//         Carrito.eliminarProducto(idProducto, producto.precio);
-//         res.redirect('/carrito');
-//     })
+    req.usuario
+        .deleteItemDelCarrito(idProducto, precio)
+        .then((result) => {
+            // console.log(result);
+            res.redirect('/carrito');
+        }).catch((err) => {
+            console.log(err);
+        });
+        
+    // Producto.findById(idProducto)
+    //     .then((producto) => {
+    //         return req.usuario.deleteItemDelCarrito(idProducto, producto);
+    //     })
+    //     .then((result) => {
+    //         res.redirect('/carrito');
+    //     })
+    //     .catch((err) => {
+    //         console.log(err);
+    //     });
+
+    // Producto.findById(idProducto, producto => {
+
+    //     Carrito.eliminarProducto(idProducto, producto.precio);
+    //     res.redirect('/carrito');
+    // })
     
-// }
+}
 
 // exports.postActualizarCantidadCarrito = (req, res) => {
 //     const idProducto = req.body.idProducto;
