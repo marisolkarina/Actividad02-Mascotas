@@ -239,19 +239,25 @@ exports.postEditarPedido = (req, res, next) => {
     const idPedido = req.body.idPedido;
     const estado = req.body.estado;
     const fechaEntrega = req.body.fechaEntrega;
+    const precioTotal = req.body.precioTotal;
 
     Pedido.findById(idPedido)
         .then((pedido) => {
+            console.log("Precio total del pedido: "+pedido.precioTotal);
 
             for (let i = 0; i < pedido.productos.length; i++) {
-                const cantidad = parseInt(req.body[`cantidadProducto${i}`], 10);
-                console.log(cantidad)
-                if (!isNaN(cantidad)) {
-                    // actualizar cantidad de cada producto
-                    pedido.productos[i].cantidad = cantidad;
-                }
-            }
+                const nuevaCantidad = parseInt(req.body[`cantidadProducto${i}`], 10);
+                const cantidadAnterior = pedido.productos[i].cantidad;
 
+                if (!isNaN(nuevaCantidad)) {
+                    // actualizar cantidad de cada producto
+                    pedido.productos[i].cantidad = nuevaCantidad;
+                }
+
+                const precio = pedido.productos[i].producto.precio;
+                pedido.precioTotal = pedido.precioTotal - precio*cantidadAnterior + precio*nuevaCantidad;
+            }
+            
             pedido.estado = estado;
             pedido.fechaEntrega = fechaEntrega;
             return pedido.save();

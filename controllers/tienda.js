@@ -251,8 +251,10 @@ exports.postMisPedidos = (req, res, next) => {
                 // traer los detalles del producto ._doc
                 return {cantidad: item.cantidad, producto: {...item.idProducto._doc}};
             });
+            const precioTotal = usuario.carrito.precioTotal;
             const pedido = new Pedido({
                 productos: productosDelPedido,
+                precioTotal: precioTotal,
                 usuario: {
                     nombre: req.usuario.nombre,
                     idUsuario: req.usuario

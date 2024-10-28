@@ -16,10 +16,14 @@
                     <input type="number" class="form-control" name="cantidadProducto<%= index %>" id="cantidadProducto" value="<%= prod.cantidad %>">
                 </div>
             <% }) %>
+
+            <label for="precioTotal" class="form-label">Precio total</label>
+            <p><%= pedido.precioTotal %></p>
+            <input type="hidden" value="<%= pedido.precioTotal %>" name="precioTotal">
             
             <!-- Campo estado del pedido -->
             <div>
-
+                <label for="estado" class="form-label">Estado</label>
                 <select name="estado" id="estado" class="form-select">
                     <option value="pendiente" <% if (pedido.estado === 'pendiente') { %>selected<% } %>>pendiente</option>
                     <option value="enviado" <% if (pedido.estado === 'enviado') { %>selected<% } %>>enviado</option>
@@ -38,7 +42,7 @@
     
             <!-- Botón de Envío -->
             <button class="btn btn-primary" type="submit">
-                Editar pedido
+                Guardar cambios
             </button>
         </form>
     </main>

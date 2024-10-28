@@ -24,6 +24,7 @@
                                 <%= prod.producto.nombre %> (<%= prod.cantidad %>)
                             <% } %> 
                         </div>
+                        <p>Precio total: <%= pedido.precioTotal %></p>
                         <form action="/cancelar-pedido" method="POST">
                             <input type="hidden" value="<%= pedido._id %>" name="idPedido">
                             <% if (pedido.estado !== 'cancelado') { %>
