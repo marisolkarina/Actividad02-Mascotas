@@ -259,7 +259,7 @@ exports.postMisPedidos = (req, res, next) => {
                 },
                 estado: 'pendiente',
                 fechaPedido: new Date(),        
-                fechaEntrega: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 dias despues del pedido
+                fechaEntrega: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 dias despues del pedido
             })
             return pedido.save();
         })
@@ -274,3 +274,19 @@ exports.postMisPedidos = (req, res, next) => {
         });
 }
 
+exports.postCancelarPedido = (req, res) => {
+    const idPedido = req.body.idPedido;
+
+    Pedido.findById(idPedido)
+        .then((pedido) => {
+            pedido.estado = 'cancelado';
+            return pedido.save();
+        })
+        .then((result) => {
+            console.log('Pedido cancelado');
+            res.redirect('/pedidos');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}

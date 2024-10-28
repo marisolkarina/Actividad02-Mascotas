@@ -38,5 +38,6 @@ router.post('/actualizar-cantidad', tiendaController.postActualizarCantidadCarri
 // Mis pedidos
 router.get('/pedidos', tiendaController.getMisPedidos);
 router.post('/crear-pedido', tiendaController.postMisPedidos);
+router.post('/cancelar-pedido', tiendaController.postCancelarPedido);
 
 module.exports = router;

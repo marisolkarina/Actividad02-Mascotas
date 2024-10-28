@@ -13,8 +13,8 @@
                     
             <% for (let pedido of pedidos) { %>
                 <div class="d-flex justify-content-center">
-                    <div class="mb-2 card" style="width: 20rem;">
-                        <h5 class="card-title text-center mt-2">Id pedido: <%= pedido._id %></h5>
+                    <div class="mb-2 card <%= pedido.estado === 'cancelado' ? 'bg-danger-subtle' : '' %>" style="width: 20rem;">
+                        <h5 class="card-title text-center mt-2">Id pedido <%= pedido._id %></h5>
                         <p>Fecha de pedido: <%= pedido.fechaPedido %></p>
                         <p>Estado del pedido: <%= pedido.estado %></p>
                         <p>Fecha de entrega: <%= pedido.fechaEntrega %></p>
@@ -24,11 +24,13 @@
                                 <%= prod.producto.nombre %> (<%= prod.cantidad %>)
                             <% } %> 
                         </div>
+                        <form action="/cancelar-pedido" method="POST">
+                            <input type="hidden" value="<%= pedido._id %>" name="idPedido">
+                            <% if (pedido.estado !== 'cancelado') { %>
+                                <button type="submit" class="btn btn-danger mt-2 w-100">Cancelar pedido</button>
+                            <% } %>
+                        </form>
                     </div>
-                    <form action="/user/cancelar-pedido" method="POST">
-                        <input type="hidden" value="<%= pedido._id %>" name="idPedido">
-                        <button type="submit" class="btn btn-danger mb-2">Cancelar pedido</button>
-                    </form>
                 </div>
                 
             <% } %>               
