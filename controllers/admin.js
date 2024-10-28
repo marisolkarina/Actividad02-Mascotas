@@ -124,20 +124,19 @@ exports.postEliminarProducto = (req, res, next) => {
 
 
 // Administracion de usuarios 
-// exports.getUsuarios = (req, res) => {
-//     let usuarios = [];
-//     Usuario.fetchAll(usuariosObtenidos => {
-//         usuarios = usuariosObtenidos;
+exports.getUsuarios = (req, res) => {
+    Usuario.find()
+        .then((usuarios) => {
+            res.render('admin/usuarios', {
+                users: usuarios,
+                titulo: "Administracion de Usuarios", 
+                path: "/admin/usuarios"
+            });
+        }).catch((err) => {
+            console.log(err);
+        });
 
-//         res.render('admin/usuarios', {
-//             users: usuarios,
-//             titulo: "Administracion de Usuarios", 
-//             path: "/admin/usuarios"
-//         });
-//     })
-
-
-// };
+};
 
 // exports.getCrearUsuario = (req, res) => {
 //     res.render('admin/crear-editar-usuario', { 

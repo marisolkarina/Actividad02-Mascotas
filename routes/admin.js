@@ -22,7 +22,7 @@ router.post('/editar-producto', adminController.postEditarProducto);
 router.post('/eliminar-producto', adminController.postEliminarProducto);
 
 // /admin/usuarios
-// router.get('/usuarios', adminController.getUsuarios);
+router.get('/usuarios', adminController.getUsuarios);
 
 // // /admin/usuarios
 // router.get('/crear-usuario', adminController.getCrearUsuario);
