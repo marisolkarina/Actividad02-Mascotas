@@ -25,17 +25,17 @@ router.post('/eliminar-producto', adminController.postEliminarProducto);
 router.get('/usuarios', adminController.getUsuarios);
 
 // // /admin/usuarios
-// router.get('/crear-usuario', adminController.getCrearUsuario);
+router.get('/crear-usuario', adminController.getCrearUsuario);
 
-// router.post('/crear-usuario', adminController.postCrearUsuario);
+router.post('/crear-usuario', adminController.postCrearUsuario);
 
 // // /admin/editar-usuario
-// router.get('/editar-usuario/:idUsuario', adminController.getEditarUsuario);
+router.get('/editar-usuario/:idUsuario', adminController.getEditarUsuario);
 
-// router.post('/editar-usuario', adminController.postEditarUsuario);
+router.post('/editar-usuario', adminController.postEditarUsuario);
 
 // // /admin/eliminar-usuario
-// router.post('/eliminar-usuario', adminController.postEliminarUsuario);
+router.post('/eliminar-usuario', adminController.postEliminarUsuario);
 
 // /admin/pedidos
 router.get('/pedidos', adminController.getPedidos);

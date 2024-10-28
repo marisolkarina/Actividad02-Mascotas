@@ -138,66 +138,99 @@ exports.getUsuarios = (req, res) => {
 
 };
 
-// exports.getCrearUsuario = (req, res) => {
-//     res.render('admin/crear-editar-usuario', { 
-//         titulo: 'Crear usuario', 
-//         path: '/crear-usuario',
-//         modoEdicion: false
-//     })
-// };
+exports.getCrearUsuario = (req, res) => {
+    res.render('admin/crear-editar-usuario', { 
+        titulo: 'Crear usuario', 
+        path: '/crear-usuario',
+        modoEdicion: false
+    })
+};
 
-// exports.postCrearUsuario = (req, res) => {
-//     const nombre = req.body.nombre;
-//     const email = req.body.email;
-//     const password = req.body.password;
-//     const role = req.body.role;
+exports.postCrearUsuario = (req, res) => {
 
-//     const usuario = new Usuario(null, nombre, email, password, role);
+    const nombre = req.body.nombre;
+    const email = req.body.email;
+    const password = req.body.password;
+    const role = req.body.role;
 
-//     usuario.save();
+    const usuario = new Usuario({ 
+        nombre: nombre, 
+        email: email,
+        password: password,
+        role: role,
+        carrito: {items: [], precioTotal: 0}
+    });
 
-//     res.redirect('/admin/usuarios')
-// }
+    usuario
+        .save()
+        .then((result) => {
+            console.log('Usuario creado');
+            res.redirect('/admin/usuarios');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 
-// exports.getEditarUsuario = (req, res) => {
+}
 
-//     const idUsuario = req.params.idUsuario;
-//     Usuario.findById(idUsuario, usuario => {
-//         console.log(usuario);
-//         if (!usuario) {
-//             return res.redirect('/admin/usuarios');
-//         }
-//         res.render('admin/crear-editar-usuario', { 
-//             titulo: 'Editar Usuario', 
-//             path: '/admin/editar-usuario',
-//             usuario: usuario,
-//             modoEdicion: true,
-//         })
-//     })
-// }
+exports.getEditarUsuario = (req, res) => {
 
-// exports.postEditarUsuario = (req, res, next) => {
-//     const idUsuario = req.body.idUsuario;
-//     const nombre = req.body.nombre;
-//     const email = req.body.email;
-//     const password = req.body.password;
-//     const role = req.body.role;
-//     const usuarioActualizado = new Usuario(
-//       idUsuario,
-//       nombre,
-//       email,
-//       password,
-//       role
-//     );
-//     usuarioActualizado.save();
-//     res.redirect('/admin/usuarios');
-// };
+    const idUsuario = req.params.idUsuario;
+    Usuario.findById(idUsuario)
+        .then((usuario) => {
+            if (!usuario) {
+                return res.redirect('/admin/usuarios');
+            }
+            res.render('admin/crear-editar-usuario', { 
+                titulo: 'Editar Usuario', 
+                path: '/admin/editar-usuario',
+                usuario: usuario,
+                modoEdicion: true,
+            })
+        }).catch((err) => {
+            console.log(err);
+        });
 
-// exports.postEliminarUsuario = (req, res, next) => {
-//     const idUsuario = req.body.idUsuario;
-//     Usuario.deleteById(idUsuario);
-//     res.redirect('/admin/usuarios');
-// }
+}
+
+exports.postEditarUsuario = (req, res, next) => {
+
+    const idUsuario = req.body.idUsuario;
+    const nombre = req.body.nombre;
+    const email = req.body.email;
+    const password = req.body.password;
+    const role = req.body.role;
+
+    Usuario.findById(idUsuario)
+        .then((usuario) => {
+            usuario.nombre = nombre;
+            usuario.email = email;
+            usuario.password = password;
+            usuario.role = role;
+            return usuario.save();
+        })
+        .then((result) => {
+            console.log('Usuario guardado');
+            res.redirect('/admin/usuarios');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
+exports.postEliminarUsuario = (req, res, next) => {
+
+    const idUsuario = req.body.idUsuario;
+
+    Usuario.findByIdAndDelete(idUsuario)
+        .then((result) => {
+            console.log('Usuario eliminado');
+            res.redirect('/admin/usuarios');
+        }).catch((err) => {
+            console.log(err);
+        });
+
+}
 
 
 exports.getPedidos = (req, res) => {
