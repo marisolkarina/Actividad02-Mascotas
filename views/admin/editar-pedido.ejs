@@ -11,7 +11,6 @@
             <% pedido.productos.forEach((prod, index) => {%>
                 <div class="mb-3">
                     <label for="nombreProducto" class="form-label">Producto</label>
-                    <!-- <input type="text" class="form-control" name="nombreProducto<%= index %>" id="nombreProducto" value="<%= prod.producto.nombre %>"> -->
                     <p><%= prod.producto.nombre %></p>
                     <label for="cantidadProducto" class="form-label">Cantidad</label>
                     <input type="number" class="form-control" name="cantidadProducto<%= index %>" id="cantidadProducto" value="<%= prod.cantidad %>">
@@ -20,8 +19,13 @@
             
             <!-- Campo estado del pedido -->
             <div>
-                <label for="estado" class="form-label">Estado</label>
-                <input type="text" class="form-control" name="estado" id="estado" value="<%= pedido.estado %>">
+
+                <select name="estado" id="estado" class="form-select">
+                    <option value="pendiente" <% if (pedido.estado === 'pendiente') { %>selected<% } %>>pendiente</option>
+                    <option value="enviado" <% if (pedido.estado === 'enviado') { %>selected<% } %>>enviado</option>
+                    <option value="entregado" <% if (pedido.estado === 'entregado') { %>selected<% } %>>entregado</option>
+                    <option value="cancelado" <% if (pedido.estado === 'cancelado') { %>selected<% } %>>cancelado</option>
+                </select>
             </div>
 
             <!-- Campo Fecha de entrega -->
