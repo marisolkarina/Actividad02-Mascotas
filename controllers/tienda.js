@@ -232,7 +232,8 @@ exports.getMisPedidos = (req, res, next) => {
             res.render('user/pedidos', {
                 path: '/pedidos',
                 titulo: 'Mis pedidos',
-                pedidos: pedidos
+                pedidos: pedidos,
+                usuario: req.usuario.nombre
             })
         }).catch((err) => {
             console.log(err);
@@ -272,3 +273,4 @@ exports.postMisPedidos = (req, res, next) => {
             console.log(err);
         });
 }
+

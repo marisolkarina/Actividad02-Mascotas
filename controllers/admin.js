@@ -201,17 +201,66 @@ exports.postEliminarProducto = (req, res, next) => {
 // }
 
 
-// exports.getPedidos = (req, res) => {
-//     let pedidos = [];
-//     Pedido.fetchAll(pedidosObtenidos => {
-//         pedidos = pedidosObtenidos;
+exports.getPedidos = (req, res) => {
 
-//         res.render('admin/pedidos', {
-//             pedidos: pedidos,
-//             titulo: "Administracion de Pedidos", 
-//             path: "/admin/pedidos"
-//         });
-//     })
+    Pedido
+        .find()
+        .then((pedidos) => {
+            res.render('admin/pedidos', {
+                path: '/admin/pedidos',
+                titulo: 'Todos los pedidos',
+                pedidos: pedidos,
+            })
+        }).catch((err) => {
+            console.log(err);
+        });
+};
 
+exports.getEditarPedido = (req, res) => {
+    const idPedido = req.params.idPedido;
+    console.log(idPedido)
 
-// };
+    Pedido.findById(idPedido)
+        .then((pedido) => {
+            if (!pedido) {
+                return res.redirect('/admin/pedidos');
+            }
+            res.render('admin/editar-pedido', { 
+                titulo: 'Editar Pedido', 
+                path: '/admin/editar-pedido',
+                pedido: pedido,
+            })
+        }).catch((err) => {
+            console.log(err);
+        });
+}
+
+exports.postEditarPedido = (req, res, next) => {
+    const idPedido = req.body.idPedido;
+    const estado = req.body.estado;
+    const fechaEntrega = req.body.fechaEntrega;
+
+    Pedido.findById(idPedido)
+        .then((pedido) => {
+
+            for (let i = 0; i < pedido.productos.length; i++) {
+                const cantidad = parseInt(req.body[`cantidadProducto${i}`], 10);
+                console.log(cantidad)
+                if (!isNaN(cantidad)) {
+                    // actualizar cantidad de cada producto
+                    pedido.productos[i].cantidad = cantidad;
+                }
+            }
+
+            pedido.estado = estado;
+            pedido.fechaEntrega = fechaEntrega;
+            return pedido.save();
+        })
+        .then((result) => {
+            console.log('Pedido guardado');
+            res.redirect('/admin/pedidos');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}

@@ -37,7 +37,12 @@ router.post('/eliminar-producto', adminController.postEliminarProducto);
 // // /admin/eliminar-usuario
 // router.post('/eliminar-usuario', adminController.postEliminarUsuario);
 
-// // /admin/pedidos
-// router.get('/pedidos', adminController.getPedidos);
+// /admin/pedidos
+router.get('/pedidos', adminController.getPedidos);
+
+// /admin/editar-pedido
+router.get('/editar-pedido/:idPedido', adminController.getEditarPedido);
+
+router.post('/editar-pedido', adminController.postEditarPedido);
 
 module.exports = router;

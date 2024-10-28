@@ -6,31 +6,47 @@
         <%- include('../includes/navigation.ejs') %>
         
         
-        <h1>Todos los pedidos</h1>
+        <h1>Lista de pedidos</h1>
 
         <% if (pedidos.length > 0) { %>
-                    
-            <% for (let pedido of pedidos) { %>
-                <div class="d-flex align-items-center">
-                    <div class="col-4 mb-2 card" style="width: 18rem;">
-                        <h5 class="card-title text-center mt-2">Id pedido: <%= pedido.id %></h5>
-                        <h5 class="card-title text-center mt-2">Id usuario: <%= pedido.idUsuario %></h5>
-                        <h5 class="text-center">Productos del pedido: </h5>
-                        <div class="text-center">
-                            <% for (let indice of pedido.productos) { %>
-                                <%= indice.nombre %>
-                            <% } %> 
-                        </div>
-                    </div>
-                    
-                </div>
-                
-            <% } %>               
-        
+            
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID pedido</th>
+                        <th>Detalles</th>
+                        <th>Cliente</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>  
+                    <% for (let pedido of pedidos) { %>
+                        <tr>
+                            <td> <%= pedido.id %> </td>
+                            <td>
+                                <div class="mb-2">
+                                    <% for (let prod of pedido.productos) { %>
+                                        <%= prod.producto.nombre %> (<%= prod.cantidad %>)
+                                    <% } %> 
+                                </div>
+                                <p>Fecha de pedido: <%= pedido.fechaPedido %></p>
+                                <p>Fecha de entrega: <%= pedido.fechaEntrega %></p>
+                            </td>
+                            <td> <%= pedido.usuario.nombre %> </td>
+                            <td> <%= pedido.estado %> </td>
+                            <td>
+                                <a href="/admin/editar-pedido/<%= pedido._id %>" class="btn btn-warning mb-2">Editar pedido</a>
+                            </td>
+                        </tr>
+                        
+                    <% } %>               
+                </tbody>
+            </table>
         <% } else { %>
             <h1>No hay pedidos</h1>
         <% } %>
-
 
 
     </main>
